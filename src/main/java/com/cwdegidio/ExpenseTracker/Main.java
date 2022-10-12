@@ -1,10 +1,13 @@
 package com.cwdegidio.ExpenseTracker;
 
 import com.cwdegidio.ExpenseTracker.model.Expense;
+import com.cwdegidio.ExpenseTracker.service.CSVService;
 import com.cwdegidio.ExpenseTracker.service.CliService;
 import com.cwdegidio.ExpenseTracker.service.ExpenseService;
+import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Scanner;
@@ -13,7 +16,7 @@ import static org.fusesource.jansi.Ansi.ansi;
 
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         AnsiConsole.systemInstall();
 
@@ -41,9 +44,11 @@ public class Main {
                 expenseService.addExpense(amount, name, type);
                 List<Expense> expenses = expenseService.getAllExpenses();
 
-                for (Expense expense:expenses) {
-                    System.out.println(expense);
-                }
+                CSVService.writeExpenseToCsv(expenses.get(expenses.size() - 1));
+
+//                for (Expense expense:expenses) {
+//                    System.out.println(expense);
+//                }
             } else if (selection == 6) {
                 System.out.println("\nGoodbye!\n");
                 System.exit(0);
