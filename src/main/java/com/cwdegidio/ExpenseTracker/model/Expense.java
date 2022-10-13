@@ -9,17 +9,20 @@ public class Expense {
 
     private BigDecimal amount;
 
-    private String name;
+    private String reference;
+
+    private String category;
 
     private String type;
 
     private ZonedDateTime date;
 
-    public Expense(int id, BigDecimal amount, String name, String type) {
+    public Expense(int id, BigDecimal amount, String name, String type, String category) {
         this.id = id;
         this.amount = amount;
-        this.name = name;
+        this.reference = name;
         this.type = type;
+        this.category = category;
         this.date = ZonedDateTime.now();
     }
 
@@ -39,12 +42,12 @@ public class Expense {
         this.amount = amount;
     }
 
-    public String getName() {
-        return name;
+    public String getReference() {
+        return reference;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setReference(String reference) {
+        this.reference = reference;
     }
 
     public String getType() {
@@ -68,8 +71,9 @@ public class Expense {
         return "Expense{" +
                 "id='" + id + '\'' +
                 ", amount=" + amount +
-                ", name='" + name + '\'' +
+                ", name='" + reference + '\'' +
                 ", type='" + type + '\'' +
+                ", category='" + category + '\'' +
                 ", date=" + date +
                 '}';
     }

@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
-public class CliService {
+public class CliMenuService {
 
     public static void generateWelcomeHeader() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss");
@@ -19,15 +19,17 @@ public class CliService {
     public static void generateMainMenu() {
         System.out.println(ansi().render("\n @|magenta Main Menu |@"));
         System.out.println("-----------------------------------------------------------------");
-        System.out.println(ansi().render("1. @|cyan Add new expense |@"));
-        System.out.println(ansi().render("2. @|cyan View all expenses |@"));
-        System.out.println(ansi().render("3. @|cyan View single expense |@"));
-        System.out.println(ansi().render("4. @|cyan Remove single expense |@"));
-        System.out.println(ansi().render("5. @|cyan Remove all expenses |@"));
-        System.out.println(ansi().render("6. @|cyan Exit application |@"));
+        System.out.println(ansi().render("1. @|cyan Expenses |@"));
+        System.out.println(ansi().render("2. @|cyan Transaction Categories |@"));
+        System.out.println(ansi().render("3. @|cyan Payment Types |@"));
     }
 
-    public static void addExpenseDialogue() {
-
+    public static void generateTransactionMenu() {
+        System.out.println(ansi().render("\n @|magenta Transaction Categories|@"));
+        System.out.println("-----------------------------------------------------------------");
+        System.out.println(ansi().render("1. @|cyan View all categories |@"));
+        System.out.println(ansi().render("2. @|cyan Create new category |@"));
+        System.out.println(ansi().render("3. @|cyan Update category |@"));
+        System.out.println(ansi().render("4. @|cyan Delete category |@"));
     }
 }
