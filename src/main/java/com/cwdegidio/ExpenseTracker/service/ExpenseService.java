@@ -11,10 +11,10 @@ public class ExpenseService {
     private static final List<Expense> expenses = new ArrayList<>();
     private int currentId = 0;
 
-    public void addExpense(BigDecimal amount, String name, String type) {
-        Expense expense = new Expense(getNextId(), amount, name, type);
-        expenses.add(expense);
-    }
+//    public void addExpense(BigDecimal amount, String name, String type) {
+//        Expense expense = new Expense(getNextId(), amount, name, type);
+//        expenses.add(expense);
+//    }
 
     public List<Expense> getAllExpenses() {
         return expenses;
