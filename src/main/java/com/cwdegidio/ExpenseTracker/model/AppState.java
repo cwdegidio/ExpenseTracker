@@ -1,18 +1,25 @@
 package com.cwdegidio.ExpenseTracker.model;
 
+import java.util.LinkedList;
+
 public class AppState {
 
-    private String currentLocation;
+    private LinkedList<String> screenHistory;
 
     public AppState() {
-        currentLocation = "mainMenu";
+        screenHistory = new LinkedList<>();
+        screenHistory.add("mainMenu");
     }
 
     public String getCurrentLocation() {
-        return currentLocation;
+        return screenHistory.getLast();
     }
 
-    public void setCurrentLocation(String currentLocation) {
-        this.currentLocation = currentLocation;
+    public void addLocationToHistory(String currentLocation) {
+        screenHistory.add(currentLocation);
+    }
+
+    public void removeLastLocationFromHistory() {
+        screenHistory.removeLast();
     }
 }

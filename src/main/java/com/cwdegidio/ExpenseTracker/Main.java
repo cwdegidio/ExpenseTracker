@@ -1,24 +1,25 @@
 package com.cwdegidio.ExpenseTracker;
 
+import com.cwdegidio.ExpenseTracker.dao.CategoryDao;
 import com.cwdegidio.ExpenseTracker.model.AppState;
-import com.cwdegidio.ExpenseTracker.service.CliMenuService;
+import com.cwdegidio.ExpenseTracker.model.Category;
+import com.cwdegidio.ExpenseTracker.service.CategoryMenuService;
+import com.cwdegidio.ExpenseTracker.service.GeneralMenuService;
 import com.cwdegidio.ExpenseTracker.service.DBService;
 import com.cwdegidio.ExpenseTracker.service.InitializationService;
 
-import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
-
-import static org.fusesource.jansi.Ansi.ansi;
 
 
 public class Main {
     public static void main(String[] args) throws SQLException {
 
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+
         AppState appState = new AppState();
-
-        CliMenuService.generateWelcomeHeader();
-
         String dbName = "expense.db";
 
         InitializationService.createNewDatabase(dbName, DBService.connect(dbName));
@@ -27,92 +28,39 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            if ("mainMenu" == appState.getCurrentLocation()) {
-                CliMenuService.generateMainMenu();
+            String location = appState.getCurrentLocation();
+            String nextLocation;
+
+            if (location.equals("categories")) {
+                nextLocation = CategoryMenuService.generateTransactionMenu(scanner);
+
+                if (nextLocation.equals("previousLocation")) {
+                    appState.removeLastLocationFromHistory();
+                } else {
+                    appState.addLocationToHistory(nextLocation);
+                }
+
+            } else if (location.equals("categoriesViewAll")) {
+                CategoryDao categoryDao = new CategoryDao();
+                List<Category> categories = categoryDao.getAll(DBService.connect(dbName));
+
+                CategoryMenuService.viewAllCategories(categories, scanner);
+                appState.removeLastLocationFromHistory();
+
+            } else if (location.equals("categoriesCreateNew")) {
+                String categoryName = CategoryMenuService.createNewCategory(scanner);
+                System.out.printf("Create new category: %s!%n", categoryName);
+
+                Category category = new Category(categoryName);
+                CategoryDao categoryDao = new CategoryDao();
+                categoryDao.save(category, DBService.connect(dbName));
+
+                appState.removeLastLocationFromHistory();
+
+            }else {
+                nextLocation = GeneralMenuService.generateMainMenu(scanner);
+                appState.addLocationToHistory(nextLocation);
             }
-
-
-            System.out.println("\nEnter a selection: ");
-
-            int selection = Integer.parseInt(scanner.nextLine());
-
         }
-
-
-
-
-
-
-//        String filename = "expense.db";
-
-//        SqliteConnect.createNewDatabase(filename);
-        // Connection connection = SqliteConnect.connect(filename);
-//         SqliteConnect.createNewTable(filename);
-
-//        DBService dbService = new DBService();
-//
-//        dbService.insert(BigDecimal.valueOf(45.00), "Car wash", "Cash");
-//        dbService.insert(BigDecimal.valueOf(1049.23), "New Computer", "Debit Card");
-//        dbService.insert(BigDecimal.valueOf(23.45), "Water Bill", "Check");
-
-
-
-
-
-
-
-
-//        AnsiConsole.systemInstall();
-//
-//        ExpenseService expenseService = new ExpenseService();
-//
-//        System.out.println(ansi().eraseScreen());
-//        CliService.generateWelcomeHeader();
-//
-//        while (true) {
-//            CliService.generateMainMenu();
-//
-//            Scanner scanner = new Scanner(System.in);
-//            System.out.println("\nEnter a selection: ");
-//
-//            int selection = Integer.parseInt(scanner.nextLine());
-//
-//            if (selection == 1) {
-//                System.out.println("Enter an amount: ");
-//                BigDecimal amount = BigDecimal.valueOf(Double.parseDouble(scanner.nextLine()));
-//                System.out.println("Enter a name: ");
-//                String name = scanner.nextLine();
-//                System.out.println("Enter a type: ");
-//                String type = scanner.nextLine();
-//
-//                expenseService.addExpense(amount, name, type);
-//                List<Expense> expenses = expenseService.getAllExpenses();
-//
-//                for (Expense expense:expenses) {
-//                    System.out.println(expense);
-//                }
-//            } else if (selection == 6) {
-//                System.out.println("\nGoodbye!\n");
-//                System.exit(0);
-//            } else {
-//                throw new NumberFormatException("Entry is invalid. Please choose a value between 1 - 6.");
-//                //System.out.println("Entry is invalid. Please choose a value between 1 - 6.");
-//            }
-//        }
-
     }
-
-
-
-//    6public void insert(BigDecimal amount, String reference, String type) {
-//        String sql = "INSERT INTO expenses(amount, reference, type) VALUE (?,?,?)";
-//
-//        try (connection; PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-//
-//            preparedStatement(1, amount);
-//
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        }
-//    }
 }

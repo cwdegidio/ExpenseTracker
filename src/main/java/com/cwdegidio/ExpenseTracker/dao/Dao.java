@@ -8,7 +8,7 @@ public interface Dao<T> {
 
     Optional<T> get (int id);
 
-    List<T> getAll();
+    List<T> getAll(Connection connection);
 
     void save (T t, Connection connection);
 
